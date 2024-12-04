@@ -1,4 +1,5 @@
-{**
+<?php
+/**
  * Copyright since 2002 Creabilis
  *
  * NOTICE OF LICENSE
@@ -15,11 +16,24 @@
  * @copyright Since 2002 Creabilis
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  * International Registered Trademark & Property of Creabilis
- *}
+ */
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
-{foreach $crea_test as $creadesc}
-          <div class="container">
-              {$creadesc.title}
-              {$creadesc.description nofilter}
-          </div>
-{/foreach}
+function upgrade_module_1_1_0($module)
+{
+    $sql = [];
+
+    if (Db::getInstance()->executeS('SHOW COLUMNS FROM ' . _DB_PREFIX_ . 'crea_test LIKE "title"') == false) {
+        $sql[] = 'ALTER TABLE `' . _DB_PREFIX_ . 'crea_test` CHANGE `nom` `title` VARCHAR(255) NOT NULL';
+    }
+
+    foreach ($sql as $query) {
+        if (Db::getInstance()->execute($query) == false) {
+            return false;
+        }
+    }
+
+    return true;
+}

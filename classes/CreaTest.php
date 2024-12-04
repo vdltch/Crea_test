@@ -20,7 +20,7 @@
 
  class CreaTest extends ObjectModel
 {
-    public $nom;
+    public $title;
     public $description;
 
     public static $definition = [
@@ -28,7 +28,7 @@
         'primary' => 'id_test',
         'multilang' => true,
         'fields' => [
-            'nom' => ['type' => self::TYPE_STRING, 'validate' => 'isGenericName', 'required' => true, 'size' => 255],
+            'title' => ['type' => self::TYPE_STRING, 'validate' => 'isGenericName', 'required' => true, 'size' => 255],
             'description' => ['type' => self::TYPE_HTML, 'lang' => true, 'validate' => 'isCleanHtml', 'required' => true],
         ],
     ];

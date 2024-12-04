@@ -31,26 +31,27 @@ class Crea_Test extends Module implements WidgetInterface
     {
         $this->name = 'crea_test';
         $this->tab = 'others';
-        $this->version = '1.0.0';
+        $this->version = '1.1.0';
         $this->author = 'Creabilis';
         $this->need_instance = 0;
 
         parent::__construct();
 
         $this->displayName = $this->l('Crea Test');
-        $this->description = $this->l('Un module de test pour PrestaShop.');
+        $this->description = $this->l('Prestashop module for test.');
     }
 
     public function renderWidget($hookName, array $configuration)
-    {        
+    {
 
         $this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
         $crea_test = CreaTest::getCreaTest((int) $this->context->language->id);
+
         if ($crea_test) {
             return $this->fetch('module:crea_test/views/templates/hook/crea_test.tpl');
         }
+        return [];
     }
-    
     public function getWidgetVariables($hookName, array $configuration)
     {
         $crea_test = CreaTest::getCreaTest((int) $this->context->language->id);
@@ -62,43 +63,50 @@ class Crea_Test extends Module implements WidgetInterface
 
     public function install()
     {
-        return parent::install() && $this->installTab() && $this->installSql() && $this->registerHook('displayHome');
+        return parent::install() 
+            && $this->installTab() 
+            && $this->installSql() 
+            && $this->registerHook('displayHome');
     }
+
     private function installTab()
-{
-    $tab = new Tab();
-    $tab->class_name = 'AdminCreaTest';
-    $tab->id_parent = (int) Tab::getIdFromClassName('AdminParentModulesSf'); // Onglet "Modules"
-    $tab->module = $this->name;
-    $tab->name = [];
+    {
+        $tab = new Tab();
+        $tab->class_name = 'AdminCreaTest';
+        $tab->id_parent = (int) Tab::getIdFromClassName('AdminParentModulesSf'); // Onglet "Modules"
+        $tab->module = $this->name;
+        $tab->name = [];
 
-    foreach (Language::getLanguages(true) as $lang) {
-        $tab->name[$lang['id_lang']] = 'Crea Test';
+        foreach (Language::getLanguages(true) as $lang) {
+            $tab->name[$lang['id_lang']] = 'Crea Test';
+        }
+
+        return $tab->add();
     }
-
-    return $tab->add();
-}
 
     public function getContent()
     {
         Tools::redirectAdmin($this->context->link->getAdminLink('AdminCreaTest'));
     }
+
     protected function installSql()
     {
         $sql = [];
 
         $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'crea_test` (
-            `id_test` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-            `nom` VARCHAR(255) NOT NULL,
-            PRIMARY KEY (`id_test`)
-        ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;';
+                `id_test` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `nom` VARCHAR(255) NOT NULL,
+                PRIMARY KEY (`id_test`)
+                ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;'
+        ;
 
         $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'crea_test_lang` (
-            `id_test` INT(10) UNSIGNED NOT NULL,
-            `id_lang` INT(10) UNSIGNED NOT NULL,
-            `description` TEXT,
-            PRIMARY KEY (`id_test`, `id_lang`)
-        ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;';
+                `id_test` INT(10) UNSIGNED NOT NULL,
+                `id_lang` INT(10) UNSIGNED NOT NULL,
+                `description` TEXT,
+                PRIMARY KEY (`id_test`, `id_lang`)
+                ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;'
+        ;
 
         foreach ($sql as $query) {
             if (Db::getInstance()->execute($query) == false) {
@@ -108,6 +116,7 @@ class Crea_Test extends Module implements WidgetInterface
 
         return true;
     }
+
     public function uninstall()
     {
         return parent::uninstall()

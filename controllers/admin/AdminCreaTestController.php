@@ -37,7 +37,7 @@ class AdminCreaTestController extends ModuleAdminController
                 'class' => 'fixed-width-xs',
                 'align' => 'center',
             ],
-            'nom' => [
+            'title' => [
                 'title' => $this->module->l('Title', 'AdminCreaTestController'),
                 'align' => 'left',
             ],
@@ -59,8 +59,8 @@ class AdminCreaTestController extends ModuleAdminController
             'input' => [
                 [
                     'type' => 'text',
-                    'label' => $this->module->l('Nom'),
-                    'name' => 'nom',
+                    'label' => $this->module->l('Name'),
+                    'name' => 'title',
                     'required' => true,
                 ],
                 [
@@ -79,6 +79,7 @@ class AdminCreaTestController extends ModuleAdminController
 
         return parent::renderForm();
     }
+
     public function initPageHeaderToolbar()
     {
         $this->page_header_toolbar_btn['new'] = [
