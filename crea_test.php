@@ -21,6 +21,7 @@
 if (!defined('_PS_VERSION_')) {
     exit;
 }
+require_once __DIR__ . '/classes/CreaTest.php';
 
 use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
 
@@ -41,26 +42,27 @@ class Crea_Test extends Module implements WidgetInterface
     }
 
     public function renderWidget($hookName, array $configuration)
-    {
-        // Vous pouvez adapter cette logique selon vos besoins
-        $this->smarty->assign([
-            'myVariable' => 'Valeur à afficher dans le widget'
-        ]);
+    {        
 
-        return $this->fetch('module:crea_test/views/templates/widget.tpl');
+        $this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
+        $crea_test = CreaTest::getCreaTest((int) $this->context->language->id);
+        if ($crea_test) {
+            return $this->fetch('module:crea_test/views/templates/hook/crea_test.tpl');
+        }
     }
     
     public function getWidgetVariables($hookName, array $configuration)
     {
-        // Retourne les données nécessaires pour le widget
+        $crea_test = CreaTest::getCreaTest((int) $this->context->language->id);
+        
         return [
-            'myVariable' => 'Valeur à utiliser'
+            'crea_test' => $crea_test,
         ];
     }
 
     public function install()
     {
-        return parent::install() && $this->installTab() && $this->installSql();
+        return parent::install() && $this->installTab() && $this->installSql() && $this->registerHook('displayHome');
     }
     private function installTab()
 {
@@ -122,4 +124,5 @@ class Crea_Test extends Module implements WidgetInterface
     
         return true;
     }
+    
 }

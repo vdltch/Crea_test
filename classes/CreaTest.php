@@ -32,5 +32,14 @@
             'description' => ['type' => self::TYPE_HTML, 'lang' => true, 'validate' => 'isCleanHtml', 'required' => true],
         ],
     ];
-    
+    public static function getCreaTest($id_lang)
+    {
+        $sql = 'SELECT * 
+        FROM ' . _DB_PREFIX_ . 'crea_test ct 
+        LEFT JOIN ' . _DB_PREFIX_ . 'crea_test_lang ctl 
+        ON ct.id_test = ctl.id_test 
+        WHERE ctl.id_lang = ' . (int)$id_lang;
+        
+        return Db::getInstance()->executeS($sql);
+    }
 }
