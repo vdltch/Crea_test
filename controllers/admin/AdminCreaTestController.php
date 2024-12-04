@@ -59,7 +59,7 @@ class AdminCreaTestController extends ModuleAdminController
             'input' => [
                 [
                     'type' => 'text',
-                    'label' => $this->module->l('Name'),
+                    'label' => $this->module->l('Title'),
                     'name' => 'title',
                     'required' => true,
                 ],

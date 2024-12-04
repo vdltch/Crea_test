@@ -16,10 +16,9 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  * International Registered Trademark & Property of Creabilis
  *}
-
 {foreach $crea_test as $creadesc}
-          <div class="container">
-              {$creadesc.title}
-              {$creadesc.description nofilter}
-          </div>
+    <div class="container">
+        {$creadesc.title}
+        {$creadesc.description nofilter}
+    </div>
 {/foreach}

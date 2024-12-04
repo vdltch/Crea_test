@@ -17,7 +17,6 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  * International Registered Trademark & Property of Creabilis
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -95,7 +94,7 @@ class Crea_Test extends Module implements WidgetInterface
 
         $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'crea_test` (
                 `id_test` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `nom` VARCHAR(255) NOT NULL,
+                `title` VARCHAR(255) NOT NULL,
                 PRIMARY KEY (`id_test`)
                 ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;'
         ;
@@ -133,5 +132,4 @@ class Crea_Test extends Module implements WidgetInterface
     
         return true;
     }
-    
 }

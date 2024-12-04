@@ -17,7 +17,6 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  * International Registered Trademark & Property of Creabilis
  */
-
  class CreaTest extends ObjectModel
 {
     public $title;
@@ -32,7 +31,8 @@
             'description' => ['type' => self::TYPE_HTML, 'lang' => true, 'validate' => 'isCleanHtml', 'required' => true],
         ],
     ];
-    public static function getCreaTest($id_lang)
+
+    public static function getCreaTest(int $id_lang)
     {
         $sql = 'SELECT * 
         FROM ' . _DB_PREFIX_ . 'crea_test ct 
