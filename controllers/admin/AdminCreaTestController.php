@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2002 Creabilis
  *
@@ -45,8 +46,11 @@ class AdminCreaTestController extends ModuleAdminController
                 'title' => $this->module->l('Description', 'AdminCreaTestController'),
                 'align' => 'left',
             ],
+            'hook_name' => [
+                'title' => $this->module->l('Hook', 'AdminCreaTestController'),
+            ],
         ];
-        $this->addRowAction('edit');
+        $this->addRowAction('edit'); 
         $this->addRowAction('delete');
     }
 
@@ -71,6 +75,17 @@ class AdminCreaTestController extends ModuleAdminController
                     'required' => true,
                     'autoload_rte' => true,
                 ],
+                [
+                    'type' => 'select',
+                    'label' => $this->module->l('Hook', 'AdminCreaTestController'),
+                    'name' => 'hook_name',
+                    'required' => true,
+                    'options' => [
+                        'query' => Hook::getHooks(false, true),
+                        'id' => 'name',
+                        'name' => 'name',
+                    ],
+                ],
             ],
             'submit' => [
                 'title' => $this->module->l('Save'),
@@ -89,5 +104,11 @@ class AdminCreaTestController extends ModuleAdminController
         ];
 
         parent::initPageHeaderToolbar();
+
+        if ($hook_name = Tools::getValue('hook_name')) {
+            if (!Hook::isModuleRegisteredOnHook($this->module, $hook_name, (int) Shop::getContextShopID())) {
+                $this->module->registerHook($hook_name);
+            }
+        }
     }
 }

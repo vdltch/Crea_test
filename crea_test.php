@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2002 Creabilis
  *
@@ -30,7 +31,7 @@ class Crea_Test extends Module implements WidgetInterface
     {
         $this->name = 'crea_test';
         $this->tab = 'others';
-        $this->version = '1.1.0';
+        $this->version = '1.1.2';
         $this->author = 'Creabilis';
         $this->need_instance = 0;
 
@@ -42,29 +43,34 @@ class Crea_Test extends Module implements WidgetInterface
 
     public function renderWidget($hookName, array $configuration)
     {
-
         $this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
-        $crea_test = CreaTest::getCreaTest((int) $this->context->language->id);
+        $crea_test = CreaTest::getCreaTest((int) $this->context->language->id, $hookName);
 
         if ($crea_test) {
             return $this->fetch('module:crea_test/views/templates/hook/crea_test.tpl');
         }
+
         return [];
     }
+
     public function getWidgetVariables($hookName, array $configuration)
     {
-        $crea_test = CreaTest::getCreaTest((int) $this->context->language->id);
-        
-        return [
-            'crea_test' => $crea_test,
-        ];
+        $crea_test = CreaTest::getCreaTest((int) $this->context->language->id, $hookName);
+
+        if ($crea_test) {
+            return [
+                'crea_test' => $crea_test,
+            ];
+        }
+
+        return [];
     }
 
     public function install()
     {
-        return parent::install() 
-            && $this->installTab() 
-            && $this->installSql() 
+        return parent::install()
+            && $this->installTab()
+            && $this->installSql()
             && $this->registerHook('displayHome');
     }
 
@@ -95,6 +101,7 @@ class Crea_Test extends Module implements WidgetInterface
         $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'crea_test` (
                 `id_test` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `title` VARCHAR(255) NOT NULL,
+                `hook_name` VARCHAR(255) NOT NULL,
                 PRIMARY KEY (`id_test`)
                 ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;'
         ;
@@ -121,15 +128,16 @@ class Crea_Test extends Module implements WidgetInterface
         return parent::uninstall()
             && $this->uninstallTab();
     }
-    
+
     private function uninstallTab()
     {
         $id_tab = (int) Tab::getIdFromClassName('AdminCreaTest');
         if ($id_tab) {
             $tab = new Tab($id_tab);
+
             return $tab->delete();
         }
-    
+
         return true;
     }
 }

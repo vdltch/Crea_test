@@ -2,7 +2,7 @@
 <module>
     <name>crea_test</name>
     <displayName><![CDATA[Crea Test]]></displayName>
-    <version><![CDATA[1.1.0]]></version>
+    <version><![CDATA[1.1.2]]></version>
     <description><![CDATA[Prestashop module for test.]]></description>
     <author><![CDATA[Creabilis]]></author>
     <tab><![CDATA[others]]></tab>

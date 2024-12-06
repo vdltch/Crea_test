@@ -21,6 +21,7 @@
 {
     public $title;
     public $description;
+    public $hook_name;
 
     public static $definition = [
         'table' => 'crea_test',
@@ -29,17 +30,19 @@
         'fields' => [
             'title' => ['type' => self::TYPE_STRING, 'validate' => 'isGenericName', 'required' => true, 'size' => 255],
             'description' => ['type' => self::TYPE_HTML, 'lang' => true, 'validate' => 'isCleanHtml', 'required' => true],
+            'hook_name' => ['type' => self::TYPE_STRING, 'validate' => 'isGenericName', 'size' => 255, 'required' => true],
         ],
     ];
 
-    public static function getCreaTest(int $id_lang)
+    public static function getCreaTest(int $id_lang, $hook_name)
     {
-        $sql = 'SELECT * 
-        FROM ' . _DB_PREFIX_ . 'crea_test ct 
-        LEFT JOIN ' . _DB_PREFIX_ . 'crea_test_lang ctl 
-        ON ct.id_test = ctl.id_test 
-        WHERE ctl.id_lang = ' . (int)$id_lang;
-        
+        $sql = 'SELECT *
+        FROM ' . _DB_PREFIX_ . 'crea_test ct
+        LEFT JOIN ' . _DB_PREFIX_ . 'crea_test_lang ctl
+        ON ct.id_test = ctl.id_test
+        WHERE ctl.id_lang = ' . (int)$id_lang . '
+        AND ct.`hook_name` = \'' . pSQL($hook_name) . '\'';
+
         return Db::getInstance()->executeS($sql);
     }
 }
